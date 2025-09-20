@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("perla-metro-tickets-service")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5bc6a787689dc32d3fa5261cedc0dbf3137402c4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a6f03dbe03227df4bd61de83732f79d66dec9fd4")]
 [assembly: System.Reflection.AssemblyProductAttribute("perla-metro-tickets-service")]
 [assembly: System.Reflection.AssemblyTitleAttribute("perla-metro-tickets-service")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
