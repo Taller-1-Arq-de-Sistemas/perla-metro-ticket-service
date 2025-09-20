@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using perla_metro_tickets_service.src.models;
 
 namespace perla_metro_tickets_service.src.DTOs
 {
@@ -12,13 +13,11 @@ namespace perla_metro_tickets_service.src.DTOs
         public required DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [Required(ErrorMessage = "El tipo de ticket es obligatorio.")]
-        [RegularExpression("^(one_way|round_trip)$", 
-            ErrorMessage = "El tipo debe ser ida o vuelta.")]
+        [EnumDataType(typeof(TicketType), ErrorMessage = "El tipo de ticket no es válido.")]
         public required string Type { get; set; }
 
         [Required(ErrorMessage = "El estado es obligatorio.")]
-        [RegularExpression("^(Active|Used|Expired)$", 
-            ErrorMessage = "El estado debe ser activo, Usado o caducado.")]
+        [EnumDataType(typeof(TicketState), ErrorMessage = "El estado del ticket no es válido.")]
         public required string Status { get; set; } = "Activo";
 
         [Required(ErrorMessage = "El monto es obligatorio.")]
