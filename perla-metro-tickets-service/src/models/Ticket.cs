@@ -4,7 +4,7 @@ using MongoDB.Bson.Serialization.Attributes;
 namespace perla_metro_tickets_service.src.models
 {
     public enum TicketType {one_way, round_trip}
-    public enum TicketState { Active, Used, Expired, Inactive}
+    public enum TicketState { Active, Used, Expired}
     public class Ticket
     {
         [BsonId]
