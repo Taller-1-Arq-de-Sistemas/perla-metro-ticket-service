@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "XSPaCtg7vsA=",
+  "dgSpecHash": "E+qy5w1i/KA=",
   "success": true,
   "projectFilePath": "C:\\Users\\nasho\\perla-metro-tickets-service\\perla-metro-tickets-service\\perla-metro-tickets-service.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\nasho\\.nuget\\packages\\automapper\\15.0.1\\automapper.15.0.1.nupkg.sha512",
     "C:\\Users\\nasho\\.nuget\\packages\\dnsclient\\1.6.1\\dnsclient.1.6.1.nupkg.sha512",
     "C:\\Users\\nasho\\.nuget\\packages\\fluentvalidation\\11.11.0\\fluentvalidation.11.11.0.nupkg.sha512",
     "C:\\Users\\nasho\\.nuget\\packages\\fluentvalidation.aspnetcore\\11.3.1\\fluentvalidation.aspnetcore.11.3.1.nupkg.sha512",
