@@ -5,13 +5,21 @@
 
 # dotenv files
 .env
+.env.development
 
 # User-specific files
+.vscode/
 *.rsuser
-*.suo
 *.user
+*.suo
 *.userosscache
 *.sln.docstates
+
+# Build outputs
+bin/
+obj/
+[Oo]utPut/
+publish/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
