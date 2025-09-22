@@ -18,6 +18,7 @@ namespace perla_metro_tickets_service.src.Services
         {
             var ticket = _mapper.Map<Ticket>(createTicketDto);
             ticket.CreatedBy = createdBy;
+            ticket.IssuedDate = new DateTime(ticket.IssuedAt.Year, ticket.IssuedAt.Month, ticket.IssuedAt.Day, ticket.IssuedAt.Hour, ticket.IssuedAt.Minute, 0);
             return ticket;
         }
 
