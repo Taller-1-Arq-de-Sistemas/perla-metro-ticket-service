@@ -4,7 +4,6 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>perla_metro_tickets_service</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
