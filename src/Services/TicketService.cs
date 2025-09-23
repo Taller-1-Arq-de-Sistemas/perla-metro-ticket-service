@@ -28,6 +28,7 @@ namespace perla_metro_tickets_service.src.Services
             if (await _ticketRepository.ExistisDuplicateAsync(mappedTicket.PassagerId, mappedTicket.IssuedDate))
                 throw new InvalidOperationException("Ya existe un ticket para este con esa fecha.");
 
+            //Obtiene los datos del pasajero desde la API MAIN
             var passager = await getPassengerFromApiAsync(mappedTicket.PassagerId);
 
             if (passager == null)
@@ -35,6 +36,7 @@ namespace perla_metro_tickets_service.src.Services
 
             await _ticketRepository.CreatedAsync(mappedTicket);
 
+            //Mapeo del ticket para visualizarlo
             var view = _mapperService.TicketToResponse(mappedTicket, passager.Name);
             return view;
         }
