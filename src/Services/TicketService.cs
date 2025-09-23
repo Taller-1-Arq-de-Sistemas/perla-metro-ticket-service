@@ -41,14 +41,34 @@ namespace perla_metro_tickets_service.src.Services
             return view;
         }
 
-        public Task<IEnumerable<ViewTicketDto>> GetAllAsync()
+        public async Task<IEnumerable<ViewTicketDto>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var tickets = await _ticketRepository.GetAllAsync();
+
+            //creacion de lista auxiliar para desplegar
+            var results = new List<ViewTicketDto>();
+
+            //Se recorre en los tickets para hacer el mapeo del ticket a visualizar el ticket con el nombre del pasajero
+            foreach (var ticket in tickets)
+            {
+                var passager = await getPassengerFromApiAsync(ticket.PassagerId);
+                var viewDto = _mapperService.TicketToResponse(ticket, passager?.Name ?? "Desconocido");
+                results.Add(viewDto);
+            }
+
+            return results;
         }
 
-        public Task<ViewTicketDto?> GetByIdAsync(Guid id)
+        public async Task<ViewTicketDto?> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var ticket = await _ticketRepository.GetByIdAsync(id);
+            if (ticket == null) return null;
+
+            //Se obtiene el pasajero
+            var passenger = await getPassengerFromApiAsync(ticket.PassagerId);
+
+            //Se retorna el ticket mapeado con el nombre del pasajero
+            return _mapperService.TicketToResponse(ticket, passenger?.Name ?? "Desconocido");
         }
 
         public Task<bool> SoftDeleteAsync(Guid id, string deletedBy)
