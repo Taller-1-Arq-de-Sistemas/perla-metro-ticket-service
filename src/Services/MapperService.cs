@@ -22,13 +22,6 @@ namespace perla_metro_tickets_service.src.Services
             return ticket;
         }
 
-        public IEnumerable<ViewTicketDto> TicketsToResponses(IEnumerable<Ticket> tickets, Func<Guid, string> passagerResolver)
-        {
-            return tickets.Select(ticket =>
-                TicketToResponse(ticket, passagerResolver(ticket.PassagerId))
-            ).ToList();
-        }
-
         public ViewTicketDto TicketToResponse(Ticket ticket, string passagerName)
         {
             var response = _mapper.Map<ViewTicketDto>(ticket);
