@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using perla_metro_tickets_service.src.DTOs;
 using perla_metro_tickets_service.src.Interfaces;
+using perla_metro_tickets_service.src.models;
 using perla_metro_tickets_service.src.Repositories;
 
 namespace perla_metro_tickets_service.src.Services
@@ -71,14 +72,27 @@ namespace perla_metro_tickets_service.src.Services
             return _mapperService.TicketToResponse(ticket, passenger?.Name ?? "Desconocido");
         }
 
-        public Task<bool> SoftDeleteAsync(Guid id, string deletedBy)
+        public async Task<bool> SoftDeleteAsync(Guid id, string deletedBy)
         {
-            throw new NotImplementedException();
+            return await _ticketRepository.SoftDeleteAsync(id, "funcionario"); 
         }
 
-        public Task<bool> UpdateAsync(Guid id, UpdateTicketDto updateTicketDto, string UpdateBy)
+        public async Task<bool> UpdateAsync(Guid id, UpdateTicketDto updateTicketDto, string UpdateBy)
         {
-            throw new NotImplementedException();
+            //Se almacena el ticket obtenido desde la id
+            var ticket = await _ticketRepository.GetByIdAsync(id);
+
+            if (ticket == null) return false;
+
+            //Se invalida la opción de reactivar el ticket si se ingresara la opción
+            if (ticket.State == TicketState.Expired && updateTicketDto.State == TicketState.Active)
+                throw new InvalidOperationException("No se puede volver a activar un ticket caducado.");
+
+            //Se mapea la información del ticket editado al ticket almacenado para guardar la información
+            _mapperService.UpdateTicketFromDto(ticket, updateTicketDto, "funcionario");
+
+            //Se guarda la información nueva
+            return await _ticketRepository.UpdateAsync(ticket);
         }
 
         //llamado a la API MAIN para obtener al pasajero
