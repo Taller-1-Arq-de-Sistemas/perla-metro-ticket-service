@@ -23,11 +23,7 @@ namespace perla_metro_tickets_service.src.Services
         }
         public async Task<ViewTicketDto> CreateAsync(CreateTicketDto createTicketDto, string CreatedBy)
         {
-            //mapeo del ticket creado, se ingresa como creado por un fucionario por defecto para agregar usuario en futuras versiones.
-            var mappedTicket = _mapperService.CreateDtoToTicket(createTicketDto, "funcionario");
-
-            if (await _ticketRepository.ExistisDuplicateAsync(mappedTicket.PassagerId, mappedTicket.IssuedDate))
-                throw new InvalidOperationException("Ya existe un ticket para este con esa fecha.");
+            var mappedTicket = _mapperService.CreateDtoToTicket(createTicketDto, CreatedBy);
 
             //Obtiene los datos del pasajero desde la API MAIN
             var passager = await getPassengerFromApiAsync(mappedTicket.PassagerId);
@@ -35,10 +31,14 @@ namespace perla_metro_tickets_service.src.Services
             if (passager == null)
                 throw new KeyNotFoundException("No se encontró el pasajero en el sistema.");
 
+            var exists = await _ticketRepository.ExistisDuplicateAsync(mappedTicket.PassagerId, mappedTicket.IssuedDate);
+
+            if (exists)
+                throw new InvalidOperationException("Ya existe un ticket para este pasajero con esa fecha.");
             await _ticketRepository.CreatedAsync(mappedTicket);
 
             //Mapeo del ticket para visualizarlo
-            var view = _mapperService.TicketToResponse(mappedTicket, passager.Name);
+            var view = _mapperService.TicketToResponse(mappedTicket, passager?.Name ?? "Desconocido" );
             return view;
         }
 
@@ -74,7 +74,7 @@ namespace perla_metro_tickets_service.src.Services
 
         public async Task<bool> SoftDeleteAsync(Guid id, string deletedBy)
         {
-            return await _ticketRepository.SoftDeleteAsync(id, "funcionario"); 
+            return await _ticketRepository.SoftDeleteAsync(id, deletedBy); 
         }
 
         public async Task<bool> UpdateAsync(Guid id, UpdateTicketDto updateTicketDto, string UpdateBy)
@@ -89,7 +89,7 @@ namespace perla_metro_tickets_service.src.Services
                 throw new InvalidOperationException("No se puede volver a activar un ticket caducado.");
 
             //Se mapea la información del ticket editado al ticket almacenado para guardar la información
-            _mapperService.UpdateTicketFromDto(ticket, updateTicketDto, "funcionario");
+            _mapperService.UpdateTicketFromDto(ticket, updateTicketDto, UpdateBy);
 
             //Se guarda la información nueva
             return await _ticketRepository.UpdateAsync(ticket);
@@ -98,11 +98,19 @@ namespace perla_metro_tickets_service.src.Services
         //llamado a la API MAIN para obtener al pasajero
         private async Task<PassagerDto?> getPassengerFromApiAsync(Guid passengerId)
         {
-            //Se debe definir el url que tendra la api main para obtener al pasajero.
-            var response = await _httpClient.GetAsync($"/api/passengers/{passengerId}");
-            if (!response.IsSuccessStatusCode) return null;
+            try
+            {
+                //Se debe definir el url que tendra la api main para obtener al pasajero.
+                var response = await _httpClient.GetAsync($"/user/{passengerId}");
+                if (!response.IsSuccessStatusCode) return null;
 
-            return await response.Content.ReadFromJsonAsync<PassagerDto>();
+                return await response.Content.ReadFromJsonAsync<PassagerDto>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error obteniendo pasajero:{ex.Message}");
+                return null;
+            }
         }
     }
 }
