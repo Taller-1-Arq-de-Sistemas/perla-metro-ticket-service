@@ -8,9 +8,7 @@ namespace perla_metro_tickets_service.src.DTOs
         [Required(ErrorMessage = "El ID del pasajero es obligatorio.")]
         public required Guid PassengerId { get; set; }
 
-        [Required(ErrorMessage = "La fecha de creación es obligatoria.")]
-        [DataType(DataType.DateTime, ErrorMessage = "La fecha debe tener un formato válido.")]
-        public required DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime IssuedAt { get; set; } = DateTime.UtcNow;
 
         [Required(ErrorMessage = "El tipo de ticket es obligatorio.")]
         [EnumDataType(typeof(TicketType), ErrorMessage = "El tipo de ticket no es válido.")]
