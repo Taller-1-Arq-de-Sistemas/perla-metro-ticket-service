@@ -14,13 +14,13 @@ namespace perla_metro_tickets_service.src.models
         public Guid PassagerId { get; set; }
 
         //Fecha y hora de emición del ticket
-        public DateTime IssuedAt { get; set; } = DateTime.UtcNow;
+        public DateTime IssuedAt { get; set; }
         public DateTime IssuedDate { get; set; } //Fecha y hora de emisión normalizada
 
         //Tipo de ticket
         public TicketType Type { get; set; }
         //Estado del ticket
-        public TicketState State { get; set; } = TicketState.Active;
+        public TicketState State { get; set; }
         //Monto pagado por el ticket
         public decimal Amount { get; set; }
         //eliminación (soft Delete) del ticket
