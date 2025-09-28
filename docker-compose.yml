@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: perla_metro_mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: perla_metro_tickets
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - ticket_network
+
+  ticket_service:
+    build: .
+    container_name: perla_metro_ticket_api
+    ports:
+      - "5000:8080"
+    depends_on:
+      - mongo
+    environment:
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__MongoDb=mongodb://mongo:27017
+      - MongoDbSettings__TicketServiceDb=perla_metro_tickets
+    networks:
+      - ticket_network
+
+volumes:
+  mongo_data:
+
+networks:
+  ticket_network:
+    driver: bridge
