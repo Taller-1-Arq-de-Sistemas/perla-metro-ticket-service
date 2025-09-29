@@ -25,12 +25,6 @@ namespace perla_metro_tickets_service.src.Services
         {
             var mappedTicket = _mapperService.CreateDtoToTicket(createTicketDto, CreatedBy);
 
-            //Obtiene los datos del pasajero desde la API MAIN
-            var passager = await getPassengerFromApiAsync(mappedTicket.PassagerId);
-
-            if (passager == null)
-                throw new KeyNotFoundException("No se encontró el pasajero en el sistema.");
-
             var exists = await _ticketRepository.ExistisDuplicateAsync(mappedTicket.PassagerId, mappedTicket.IssuedDate);
 
             if (exists)
@@ -38,7 +32,7 @@ namespace perla_metro_tickets_service.src.Services
             await _ticketRepository.CreatedAsync(mappedTicket);
 
             //Mapeo del ticket para visualizarlo
-            var view = _mapperService.TicketToResponse(mappedTicket, passager?.Name ?? "Desconocido" );
+            var view = _mapperService.TicketToResponse(mappedTicket, "Desconocido" );
             return view;
         }
 
@@ -52,8 +46,7 @@ namespace perla_metro_tickets_service.src.Services
             //Se recorre en los tickets para hacer el mapeo del ticket a visualizar el ticket con el nombre del pasajero
             foreach (var ticket in tickets)
             {
-                var passager = await getPassengerFromApiAsync(ticket.PassagerId);
-                var viewDto = _mapperService.TicketToResponse(ticket, passager?.Name ?? "Desconocido");
+                var viewDto = _mapperService.TicketToResponse(ticket, "Desconocido");
                 results.Add(viewDto);
             }
 
@@ -65,11 +58,8 @@ namespace perla_metro_tickets_service.src.Services
             var ticket = await _ticketRepository.GetByIdAsync(id);
             if (ticket == null) return null;
 
-            //Se obtiene el pasajero
-            var passenger = await getPassengerFromApiAsync(ticket.PassagerId);
-
             //Se retorna el ticket mapeado con el nombre del pasajero
-            return _mapperService.TicketToResponse(ticket, passenger?.Name ?? "Desconocido");
+            return _mapperService.TicketToResponse(ticket, "Desconocido");
         }
 
         public async Task<bool> SoftDeleteAsync(Guid id, string deletedBy)
@@ -93,24 +83,6 @@ namespace perla_metro_tickets_service.src.Services
 
             //Se guarda la información nueva
             return await _ticketRepository.UpdateAsync(ticket);
-        }
-
-        //llamado a la API MAIN para obtener al pasajero
-        private async Task<PassagerDto?> getPassengerFromApiAsync(Guid passengerId)
-        {
-            try
-            {
-                //Se debe definir el url que tendra la api main para obtener al pasajero.
-                var response = await _httpClient.GetAsync($"/user/{passengerId}");
-                if (!response.IsSuccessStatusCode) return null;
-
-                return await response.Content.ReadFromJsonAsync<PassagerDto>();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error obteniendo pasajero:{ex.Message}");
-                return null;
-            }
         }
     }
 }
