@@ -63,12 +63,6 @@ cd perla-metro-ticket-service
 agregar el siguiente codigo en la carpeta principal del proyecto con nombre appsettings.json
 ```bash
 {
-  "MainApiBaseUrl": "http://api-main:8000",
-  "Jwt": {
-    "Key": "clave-secreta-super-segura", 
-    "Issuer": "auth_service",
-    "Audience": "perla_metro_tickets_api"
-  },
   "ConnectionStrings": {
     "MongoDb": "http://localhost:27017/"
   },
