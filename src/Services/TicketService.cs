@@ -13,13 +13,11 @@ namespace perla_metro_tickets_service.src.Services
     {
         private readonly ITicketRepository _ticketRepository;
         private readonly IMapperService _mapperService;
-        private readonly HttpClient _httpClient;
 
-        public TicketService(ITicketRepository ticketRepository, IMapperService mapperService, HttpClient httpClient)
+        public TicketService(ITicketRepository ticketRepository, IMapperService mapperService)
         {
             _ticketRepository = ticketRepository;
             _mapperService = mapperService;
-            _httpClient = httpClient;
         }
         public async Task<ViewTicketDto> CreateAsync(CreateTicketDto createTicketDto, string CreatedBy)
         {
