@@ -14,16 +14,13 @@ builder.Services.AddSingleton<MongoContext>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<IMapperService, MapperService>();
-builder.Services.AddHttpClient<TicketService>(client =>
-{
-    client.BaseAddress = new Uri(builder.Configuration["MainApiBaseUrl"]!);
-});
 
 builder.Services.AddAutoMapper(cfg => { }, typeof(MappingProfile));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Configuration.AddEnvironmentVariables();
 
 var app = builder.Build();
 
@@ -34,7 +31,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseAuthentication();
 app.UseAuthorization(); 
 app.MapControllers();
 
