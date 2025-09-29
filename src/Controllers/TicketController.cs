@@ -22,7 +22,6 @@ namespace perla_metro_tickets_service.src.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([FromBody] CreateTicketDto createTicketDto)
         {
             try
@@ -43,7 +42,6 @@ namespace perla_metro_tickets_service.src.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> GetAll()
         {
             var tickets = await _ticketService.GetAllAsync();
@@ -51,7 +49,6 @@ namespace perla_metro_tickets_service.src.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetById(Guid id)
         {
             try
@@ -68,7 +65,6 @@ namespace perla_metro_tickets_service.src.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(Guid id, [FromBody] UpdateTicketDto updateTicketDto)
         {
             try
@@ -90,7 +86,6 @@ namespace perla_metro_tickets_service.src.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> SoftDelete(Guid id)
         {
             try
